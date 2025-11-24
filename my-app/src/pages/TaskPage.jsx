@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    Card, 
-    Button, 
-    Form, 
-    Input, 
-    Select, 
-    Table, 
-    Tag, 
-    Space, 
-    Modal, 
-    Row, 
-    Col, 
-    Typography, 
+import {
+    Card,
+    Button,
+    Form,
+    Input,
+    Select,
+    Table,
+    Tag,
+    Space,
+    Modal,
+    Row,
+    Col,
+    Typography,
     message,
-    Popconfirm,
-    Layout
+    Popconfirm
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import taskService from '../api/taskService';
@@ -22,7 +21,6 @@ import customerService from '../api/customerService';
 import employeeService from '../api/employeeService';
 
 const { Title } = Typography;
-const { Content } = Layout;
 const { Option } = Select;
 
 const TaskPage = () => {
@@ -266,72 +264,85 @@ const TaskPage = () => {
     ];
 
     return (
-        <Layout style={{ minHeight: '100vh', background: '#f0f2f5' }}>
-            <Content style={{ padding: '24px' }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                    <Row justify="space-between" align="middle" style={{ marginBottom: '24px' }}>
-                        <Col>
-                            <Title level={2}>Task Management</Title>
-                        </Col>
-                        <Col>
-                            <Button
-                                type="primary"
-                                icon={<PlusOutlined />}
-                                onClick={() => setShowForm(true)}
-                                size="large"
-                            >
-                                Assign New Task
-                            </Button>
-                        </Col>
-                    </Row>
-                    
-                    {/* Employee Filter */}
-                    <Row gutter={16} style={{ marginBottom: '24px' }}>
-                        <Col>
-                            <Select
-                                allowClear
-                                placeholder="Filter by Employee"
-                                style={{ width: 200 }}
-                                onChange={(value) => setSelectedEmployee(value)}
-                                value={selectedEmployee}
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                            >
-                                {employees.map(emp => (
-                                    <Option key={emp._id} value={emp._id}>{emp.name}</Option>
-                                ))}
-                            </Select>
-                            {selectedEmployee && (
-                                <Button 
-                                    type="link" 
-                                    onClick={() => setSelectedEmployee(null)}
-                                    style={{ marginLeft: 8 }}
-                                >
-                                    Clear filter
-                                </Button>
-                            )}
-                        </Col>
-                    </Row>
-
-                    <Modal
-                        title={editingTask ? 'Edit Task' : 'Assign New Task'}
-                        open={showForm}
-                        onCancel={resetForm}
-                        footer={null}
-                        width={800}
-                        destroyOnClose
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <Row
+                className="page-header"
+                justify="space-between"
+                align="middle"
+                style={{ marginBottom: '24px' }}
+                gutter={[16, 16]}
+            >
+                <Col xs={24} sm={12}>
+                    <Title level={3} style={{ margin: 0, color: '#1e293b' }}>Task Management</Title>
+                </Col>
+                <Col xs={24} sm={12} style={{ textAlign: 'right' }}>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => setShowForm(true)}
+                        size="large"
+                        block={window.innerWidth <= 480}
                     >
-                        <Form
-                            form={form}
-                            layout="vertical"
-                            onFinish={handleSubmit}
-                            initialValues={{ priority: 'Medium' }}
+                        Assign New Task
+                    </Button>
+                </Col>
+            </Row>
+
+            {/* Employee Filter */}
+            <Row
+                className="filter-section"
+                gutter={[16, 16]}
+                style={{ marginBottom: '24px' }}
+                align="middle"
+            >
+                <Col xs={24} sm={12} md={8}>
+                    <Select
+                        allowClear
+                        placeholder="Filter by Employee"
+                        style={{ width: '100%' }}
+                        onChange={(value) => setSelectedEmployee(value)}
+                        value={selectedEmployee}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {employees.map(emp => (
+                            <Option key={emp._id} value={emp._id}>{emp.name}</Option>
+                        ))}
+                    </Select>
+                </Col>
+                {selectedEmployee && (
+                    <Col>
+                        <Button
+                            type="link"
+                            onClick={() => setSelectedEmployee(null)}
                         >
-                            <Row gutter={16}>
-                                <Col span={12}>
+                            Clear filter
+                        </Button>
+                    </Col>
+                )}
+            </Row>
+
+            <Modal
+                title={editingTask ? 'Edit Task' : 'Assign New Task'}
+                open={showForm}
+                onCancel={resetForm}
+                footer={null}
+                width="90%"
+                style={{ maxWidth: 800 }}
+                destroyOnClose
+                centered
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSubmit}
+                    initialValues={{ priority: 'Medium' }}
+                >
+                            <Row gutter={[16, 0]}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="Task Title"
                                         name="title"
@@ -340,7 +351,7 @@ const TaskPage = () => {
                                         <Input placeholder="Enter task title" />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="Priority"
                                         name="priority"
@@ -354,8 +365,8 @@ const TaskPage = () => {
                                 </Col>
                             </Row>
 
-                            <Row gutter={16}>
-                                <Col span={12}>
+                            <Row gutter={[16, 0]}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="Select Customer"
                                         name="customerId"
@@ -375,7 +386,7 @@ const TaskPage = () => {
                                         </Select>
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item
                                         label="Assign to Employee"
                                         name="employeeId"
@@ -402,23 +413,23 @@ const TaskPage = () => {
                                     size="small"
                                     style={{ marginBottom: '16px', backgroundColor: '#f6f8fa' }}
                                 >
-                                    <Row gutter={16}>
-                                        <Col span={8}>
+                                    <Row gutter={[16, 8]}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Customer:</strong> {customerData.customerName}
                                         </Col>
-                                        <Col span={8}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Phone:</strong> {customerData.phoneNumber}
                                         </Col>
-                                        <Col span={8}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Contractor:</strong> {customerData.contractor?.name || 'N/A'}
                                         </Col>
-                                        <Col span={8}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Due Date:</strong> {customerData.dueDate ? new Date(customerData.dueDate).toLocaleDateString() : 'N/A'}
                                         </Col>
-                                        <Col span={8}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Amount:</strong> ${customerData.amount}
                                         </Col>
-                                        <Col span={8}>
+                                        <Col xs={24} sm={12} md={8}>
                                             <strong>Status:</strong> {customerData.status}
                                         </Col>
                                     </Row>
@@ -439,38 +450,40 @@ const TaskPage = () => {
                                 <Input.TextArea rows={2} placeholder="Enter any additional notes" />
                             </Form.Item>
 
-                            <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
-                                <Space>
-                                    <Button onClick={resetForm}>
-                                        Cancel
-                                    </Button>
-                                    <Button type="primary" htmlType="submit" loading={loading}>
-                                        {editingTask ? 'Update Task' : 'Assign Task'}
-                                    </Button>
-                                </Space>
-                            </Form.Item>
-                        </Form>
-                    </Modal>
+                    <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
+                        <Space>
+                            <Button onClick={resetForm}>
+                                Cancel
+                            </Button>
+                            <Button type="primary" htmlType="submit" loading={loading}>
+                                {editingTask ? 'Update Task' : 'Assign Task'}
+                            </Button>
+                        </Space>
+                    </Form.Item>
+                </Form>
+            </Modal>
 
-                    <Card>
-                        <Table
-                            columns={columns}
-                            dataSource={filteredTasks}
-                            rowKey="_id"
-                            loading={loading}
-                            pagination={{
-                                showSizeChanger: true,
-                                showQuickJumper: true,
-                                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} tasks`,
-                            }}
-                            locale={{
-                                emptyText: 'No tasks assigned yet. Click "Assign New Task" to get started.',
-                            }}
-                        />
-                    </Card>
+            <Card bodyStyle={{ padding: 0, overflow: 'hidden' }}>
+                <div className="responsive-table-wrapper">
+                    <Table
+                        columns={columns}
+                        dataSource={filteredTasks}
+                        rowKey="_id"
+                        loading={loading}
+                        scroll={{ x: 900 }}
+                        pagination={{
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} tasks`,
+                            responsive: true,
+                        }}
+                        locale={{
+                            emptyText: 'No tasks assigned yet. Click "Assign New Task" to get started.',
+                        }}
+                    />
                 </div>
-            </Content>
-        </Layout>
+            </Card>
+        </div>
     );
 };
 

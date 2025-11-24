@@ -226,90 +226,103 @@ export default function CustomerPage() {
 
     return (
         <div style={{ padding: '24px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-            <div style={{ 
-                backgroundColor: 'white', 
-                padding: '20px', 
-                borderRadius: '8px', 
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)', 
-                marginBottom: "20px" 
+            <div style={{
+                backgroundColor: 'white',
+                padding: '16px',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                marginBottom: "20px"
             }}>
-                <Button 
-                    type="primary" 
-                    onClick={() => { setModalVisible(true); setIsEdit(false); form.resetFields(); }} 
-                    style={{ 
-                        marginRight: "10px",
-                        backgroundColor: '#1890ff',
-                        borderColor: '#1890ff',
-                        borderRadius: '6px',
-                        height: '40px',
-                        fontWeight: '500'
-                    }}
-                >
-                    Add Customer
-                </Button>
-                <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-                    <Select 
-                        placeholder="Filter by Status" 
-                        value={statusFilter} 
-                        onChange={setStatusFilter} 
-                        style={{ 
-                            width: 150,
-                            borderRadius: '6px'
-                        }} 
-                        allowClear
-                    >
-                        <Select.Option value="New">New</Select.Option>
-                        <Select.Option value="Process">Process</Select.Option>
-                        <Select.Option value="Correction">Correction</Select.Option>
-                        <Select.Option value="Payment">Payment</Select.Option>
-                        <Select.Option value="Finished">Finished</Select.Option>
-                    </Select>
-                    <Select 
-                        placeholder="Filter by Contractor" 
-                        value={contractorFilter} 
-                        onChange={setContractorFilter} 
-                        style={{ 
-                            width: 200,
-                            borderRadius: '6px'
-                        }} 
-                        allowClear
-                    >
-                        {contractors.map(c => <Select.Option key={c._id} value={c._id}>{c.name}</Select.Option>)}
-                    </Select>
-                    <Button 
-                        onClick={clearFilters}
-                        style={{
-                            borderRadius: '6px',
-                            height: '32px',
-                            borderColor: '#d9d9d9',
-                            color: '#595959'
-                        }}
-                    >
-                        Clear Filters
-                    </Button>
-                </div>
+                <Row gutter={[16, 16]} align="middle">
+                    <Col xs={24} sm={12} md={6}>
+                        <Button
+                            type="primary"
+                            onClick={() => { setModalVisible(true); setIsEdit(false); form.resetFields(); }}
+                            style={{
+                                backgroundColor: '#1890ff',
+                                borderColor: '#1890ff',
+                                borderRadius: '6px',
+                                height: '40px',
+                                fontWeight: '500',
+                                width: '100%'
+                            }}
+                        >
+                            Add Customer
+                        </Button>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <Select
+                            placeholder="Filter by Status"
+                            value={statusFilter}
+                            onChange={setStatusFilter}
+                            style={{
+                                width: '100%',
+                                borderRadius: '6px'
+                            }}
+                            allowClear
+                        >
+                            <Select.Option value="New">New</Select.Option>
+                            <Select.Option value="Process">Process</Select.Option>
+                            <Select.Option value="Correction">Correction</Select.Option>
+                            <Select.Option value="Payment">Payment</Select.Option>
+                            <Select.Option value="Finished">Finished</Select.Option>
+                        </Select>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <Select
+                            placeholder="Filter by Contractor"
+                            value={contractorFilter}
+                            onChange={setContractorFilter}
+                            style={{
+                                width: '100%',
+                                borderRadius: '6px'
+                            }}
+                            allowClear
+                        >
+                            {contractors.map(c => <Select.Option key={c._id} value={c._id}>{c.name}</Select.Option>)}
+                        </Select>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <Button
+                            onClick={clearFilters}
+                            style={{
+                                borderRadius: '6px',
+                                height: '32px',
+                                borderColor: '#d9d9d9',
+                                color: '#595959',
+                                width: '100%'
+                            }}
+                        >
+                            Clear Filters
+                        </Button>
+                    </Col>
+                </Row>
             </div>
 
             <div style={{
                 backgroundColor: 'white',
-                padding: '20px',
+                padding: '16px',
                 borderRadius: '8px',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}>
-                <Table 
-                    dataSource={filteredData} 
-                    columns={columns} 
-                    rowKey="_id"
-                    style={{
-                        borderRadius: '8px'
-                    }}
-                    pagination={{
-                        pageSize: 10,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} customers`
-                    }}
-                />
+                <div className="responsive-table-wrapper">
+                    <Table
+                        dataSource={filteredData}
+                        columns={columns}
+                        rowKey="_id"
+                        scroll={{ x: 900 }}
+                        style={{
+                            borderRadius: '8px'
+                        }}
+                        pagination={{
+                            pageSize: 10,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} customers`,
+                            responsive: true
+                        }}
+                    />
+                </div>
             </div>
 
             {/* Add / Edit Modal */}
@@ -318,7 +331,9 @@ export default function CustomerPage() {
                 open={modalVisible}
                 onOk={handleAddOrUpdate}
                 onCancel={() => setModalVisible(false)}
-                width={1000}
+                width="95%"
+                style={{ maxWidth: 1000 }}
+                centered
             >
                 <Form
                     form={form}
@@ -337,25 +352,25 @@ export default function CustomerPage() {
                         form.setFieldsValue({ balance: amount - advance });
                     }}
                 >
-                    <Row gutter={16}>
-                        <Col span={8}><Form.Item name="customerName" label="Customer Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
-                        <Col span={8}><Form.Item name="contractorId" label="Contractor Name" rules={[{ required: true }]}><Select placeholder="Select Contractor">{contractors.map(c => <Select.Option key={c._id} value={c._id}>{c.name}</Select.Option>)}</Select></Form.Item></Col>
-                        <Col span={8}><Form.Item name="phoneNumber" label="Phone Number"><Input /></Form.Item></Col>
+                    <Row gutter={[16, 0]}>
+                        <Col xs={24} sm={12} md={8}><Form.Item name="customerName" label="Customer Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
+                        <Col xs={24} sm={12} md={8}><Form.Item name="contractorId" label="Contractor Name" rules={[{ required: true }]}><Select placeholder="Select Contractor">{contractors.map(c => <Select.Option key={c._id} value={c._id}>{c.name}</Select.Option>)}</Select></Form.Item></Col>
+                        <Col xs={24} sm={12} md={8}><Form.Item name="phoneNumber" label="Phone Number"><Input /></Form.Item></Col>
                     </Row>
 
-                    <Row gutter={16}>
-                        <Col span={6}><Form.Item name="dueDays" label="Due Days"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={6}><Form.Item name="todayDate" label="Today Date"><DatePicker style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={6}><Form.Item name="dueDate" label="Due Date"><DatePicker style={{ width: "100%" }} disabled /></Form.Item></Col>
-                        <Col span={6}><Form.Item name="status" label="Status"><Select><Select.Option value="New">New</Select.Option><Select.Option value="Process">Process</Select.Option><Select.Option value="Correction">Correction</Select.Option><Select.Option value="Payment">Payment</Select.Option><Select.Option value="Finished">Finished</Select.Option></Select></Form.Item></Col>
+                    <Row gutter={[16, 0]}>
+                        <Col xs={12} sm={12} md={6}><Form.Item name="dueDays" label="Due Days"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={12} md={6}><Form.Item name="todayDate" label="Today Date"><DatePicker style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={12} md={6}><Form.Item name="dueDate" label="Due Date"><DatePicker style={{ width: "100%" }} disabled /></Form.Item></Col>
+                        <Col xs={12} sm={12} md={6}><Form.Item name="status" label="Status"><Select><Select.Option value="New">New</Select.Option><Select.Option value="Process">Process</Select.Option><Select.Option value="Correction">Correction</Select.Option><Select.Option value="Payment">Payment</Select.Option><Select.Option value="Finished">Finished</Select.Option></Select></Form.Item></Col>
                     </Row>
 
-                    <Row gutter={16}>
-                        <Col span={4}><Form.Item name="amount" label="Amount"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={4}><Form.Item name="advance" label="Advance"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={4}><Form.Item name="part01" label="Part-01"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={4}><Form.Item name="part02" label="Part-02"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                        <Col span={4}><Form.Item name="balance" label="Balance"><InputNumber style={{ width: "100%" }} disabled /></Form.Item></Col>
+                    <Row gutter={[16, 0]}>
+                        <Col xs={12} sm={8} md={4}><Form.Item name="amount" label="Amount"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={8} md={4}><Form.Item name="advance" label="Advance"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={8} md={4}><Form.Item name="part01" label="Part-01"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={8} md={4}><Form.Item name="part02" label="Part-02"><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                        <Col xs={12} sm={8} md={4}><Form.Item name="balance" label="Balance"><InputNumber style={{ width: "100%" }} disabled /></Form.Item></Col>
                     </Row>
                     
                     <Tabs
@@ -457,28 +472,28 @@ export default function CustomerPage() {
             </Modal>
 
             {/* View Modal */}
-            <Modal title="Customer Details" open={viewModalVisible} onCancel={() => setViewModalVisible(false)} footer={null} width={1000}>
+            <Modal title="Customer Details" open={viewModalVisible} onCancel={() => setViewModalVisible(false)} footer={null} width="95%" style={{ maxWidth: 1000 }} centered>
                 {viewingCustomer && (
                     <div>
-                        <Row gutter={16}>
-                            <Col span={8}><p><strong>Customer Name:</strong> {viewingCustomer.customerName}</p></Col>
-                            <Col span={8}><p><strong>Contractor Name:</strong> {typeof viewingCustomer.contractorId === 'object' ? viewingCustomer.contractorId.name : contractors.find(c => c._id===viewingCustomer.contractorId)?.name || 'Not Assigned'}</p></Col>
-                            <Col span={8}><p><strong>Phone:</strong> {viewingCustomer.phoneNumber}</p></Col>
+                        <Row gutter={[16, 8]}>
+                            <Col xs={24} sm={12} md={8}><p><strong>Customer Name:</strong> {viewingCustomer.customerName}</p></Col>
+                            <Col xs={24} sm={12} md={8}><p><strong>Contractor Name:</strong> {typeof viewingCustomer.contractorId === 'object' ? viewingCustomer.contractorId.name : contractors.find(c => c._id===viewingCustomer.contractorId)?.name || 'Not Assigned'}</p></Col>
+                            <Col xs={24} sm={12} md={8}><p><strong>Phone:</strong> {viewingCustomer.phoneNumber}</p></Col>
                         </Row>
-                        <Row gutter={16}>
-                            <Col span={6}><p><strong>Due Days:</strong> {viewingCustomer.dueDays}</p></Col>
-                            <Col span={6}><p><strong>Today Date:</strong> {viewingCustomer.todayDate ? dayjs(viewingCustomer.todayDate).format('YYYY-MM-DD') : 'N/A'}</p></Col>
-                            <Col span={6}><p><strong>Due Date:</strong> {viewingCustomer.dueDate ? dayjs(viewingCustomer.dueDate).format('YYYY-MM-DD') : 'N/A'}</p></Col>
-                            <Col span={6}><p><strong>Status:</strong> {viewingCustomer.status}</p></Col>
+                        <Row gutter={[16, 8]}>
+                            <Col xs={12} sm={12} md={6}><p><strong>Due Days:</strong> {viewingCustomer.dueDays}</p></Col>
+                            <Col xs={12} sm={12} md={6}><p><strong>Today Date:</strong> {viewingCustomer.todayDate ? dayjs(viewingCustomer.todayDate).format('YYYY-MM-DD') : 'N/A'}</p></Col>
+                            <Col xs={12} sm={12} md={6}><p><strong>Due Date:</strong> {viewingCustomer.dueDate ? dayjs(viewingCustomer.dueDate).format('YYYY-MM-DD') : 'N/A'}</p></Col>
+                            <Col xs={12} sm={12} md={6}><p><strong>Status:</strong> {viewingCustomer.status}</p></Col>
                         </Row>
-                        <Row gutter={16}>
-                            <Col span={4}><p><strong>Amount:</strong> {viewingCustomer.amount || 'N/A'}</p></Col>
-                            <Col span={4}><p><strong>Advance:</strong> {viewingCustomer.advance || 'N/A'}</p></Col>
-                            <Col span={4}><p><strong>Part-01:</strong> {viewingCustomer.part01 || 'N/A'}</p></Col>
-                            <Col span={4}><p><strong>Part-02:</strong> {viewingCustomer.part02 || 'N/A'}</p></Col>
-                            <Col span={4}><p><strong>Balance:</strong> {viewingCustomer.balance || 'N/A'}</p></Col>
+                        <Row gutter={[16, 8]}>
+                            <Col xs={12} sm={8} md={4}><p><strong>Amount:</strong> {viewingCustomer.amount || 'N/A'}</p></Col>
+                            <Col xs={12} sm={8} md={4}><p><strong>Advance:</strong> {viewingCustomer.advance || 'N/A'}</p></Col>
+                            <Col xs={12} sm={8} md={4}><p><strong>Part-01:</strong> {viewingCustomer.part01 || 'N/A'}</p></Col>
+                            <Col xs={12} sm={8} md={4}><p><strong>Part-02:</strong> {viewingCustomer.part02 || 'N/A'}</p></Col>
+                            <Col xs={12} sm={8} md={4}><p><strong>Balance:</strong> {viewingCustomer.balance || 'N/A'}</p></Col>
                         </Row>
-                        
+
                         <h4>Selected Services</h4>
                         {getSelectedServices(viewingCustomer).length > 0 ? (
                             <ul>
@@ -489,9 +504,9 @@ export default function CustomerPage() {
                         ) : (
                             <p>No services selected</p>
                         )}
-                        
+
                         {viewingCustomer.notes && (
-                            <Row gutter={16}>
+                            <Row gutter={[16, 8]}>
                                 <Col span={24}>
                                     <p><strong>General Notes:</strong> {viewingCustomer.notes}</p>
                                 </Col>

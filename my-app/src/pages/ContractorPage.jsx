@@ -75,18 +75,29 @@ export default function ContractorPage() {
                     setIsEdit(false);
                     form.resetFields();
                 }}
-                style={{ marginBottom: "10px" }}
+                style={{ marginBottom: "16px" }}
             >
                 Add Contractor
             </Button>
 
-            <Table dataSource={data} columns={columns} rowKey="_id" />
+            <div className="responsive-table-wrapper">
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    rowKey="_id"
+                    scroll={{ x: 500 }}
+                    pagination={{ responsive: true }}
+                />
+            </div>
 
             <Modal
                 title={isEdit ? "Edit Contractor" : "Add Contractor"}
                 open={modalVisible}
                 onOk={handleAddOrUpdate}
                 onCancel={() => setModalVisible(false)}
+                width="90%"
+                style={{ maxWidth: 500 }}
+                centered
             >
                 <Form form={form} layout="vertical">
                     <Form.Item name="name" label="Name" rules={[{ required: true }]}>
